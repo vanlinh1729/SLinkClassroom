@@ -1,0 +1,280 @@
+﻿<Window x:Class="SuperLinkClassroom.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:SuperLinkClassroom"
+        xmlns:rdp="clr-namespace:VncSharpWpf;assembly=VncSharpWpf"
+        xmlns:customControls="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+        xmlns:userControl="clr-namespace:SuperLinkClassroom.UserControl"
+        Loaded="MainWindow_OnLoad"
+        mc:Ignorable="d"
+        Title="S-Link Classroom Management" Height="703" Width="1375" WindowStartupLocation="CenterScreen" Icon="/logoslink1.png">
+    <Grid x:Name="mainContentGrid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="9*"/>
+            <ColumnDefinition Width="59*"/>
+            <ColumnDefinition Width="39*"/>
+            <ColumnDefinition Width="42*"/>
+            <ColumnDefinition Width="328*"/>
+            <ColumnDefinition Width="898*"/>
+        </Grid.ColumnDefinitions>
+        <customControls:Card Margin="4,4,4,4" Grid.ColumnSpan="6">
+            <!-- Menu content -->
+        </customControls:Card>
+
+        <customControls:Card Margin="1,10,10,10" Grid.ColumnSpan="5" Grid.Column="1">
+            <TabControl customControls:ColorZoneAssist.Mode="PrimaryDark">
+                <TabItem Header="Class">
+                    <Grid>
+                        <TabControl x:Name="connectTabControl"
+                                    HorizontalContentAlignment="Left"
+                                    customControls:ColorZoneAssist.Mode="PrimaryMid"
+                                    customControls:NavigationRailAssist.SelectionCornerRadius="50 10 10 10"
+                                    customControls:NavigationRailAssist.ShowSelectionBackground="True"
+                                    Style="{StaticResource MaterialDesignNavigationRailTabControl}"
+                                    TabStripPlacement="Top">
+                            <customControls:NavigationRailAssist.FloatingContent>
+                                <Button Margin="8" Style="{StaticResource MaterialDesignFloatingActionLightButton}">
+                                    <customControls:PackIcon Width="24" Height="24" Kind="GoogleClassroom" />
+                                </Button>
+                            </customControls:NavigationRailAssist.FloatingContent>
+                            <TabItem x:Name="mainTabItem" Width="110">
+                                <TabItem.Header>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <customControls:PackIcon Margin="2,0" Width="24" Height="24" HorizontalAlignment="Center" Kind="Connection" />
+                                        <TextBlock HorizontalAlignment="Center" Text="Classroom" />
+                                    </StackPanel>
+                                </TabItem.Header>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <!-- New row for buttons -->
+                                        <RowDefinition Height="*" />
+                                        <!-- Existing row for canvas -->
+                                    </Grid.RowDefinitions>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10">
+                                        <Button Width="113"
+                                                Margin="0,10,8,0"
+                                                Padding="10,5"
+                                                x:Name="btn_Connect"
+                                                Style="{StaticResource MaterialDesignRaisedLightButton}"
+                                                Click="Button_Click">
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <customControls:PackIcon Margin="2,0" Width="24" Height="24" Kind="LanConnect" />
+                                                <TextBlock x:Name="txtConnect" Text="Connect" Margin="5,0,0,0" />
+                                            </StackPanel>
+                                        </Button>
+                                        <Button Width="130"
+                                                Margin="0,10,5,0"
+                                                Padding="10,5"
+                                                x:Name="btn_Disconnect"
+                                                Style="{StaticResource MaterialDesignRaisedLightButton}"
+                                                Click="Button_Click_1">
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <customControls:PackIcon Margin="2,0" Width="24" Height="24" Kind="LanDisconnect" />
+                                                <TextBlock Text="Disconnect" Margin="5,0,0,0" />
+                                            </StackPanel>
+                                        </Button>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                                        <Button 
+                                                Margin="0,10,8,0"
+                                                Padding="10,5"
+                                                Style="{StaticResource MaterialDesignRaisedLightButton}">
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <customControls:PackIcon Margin="2,0" Width="24" Height="24" Kind="Users" />
+                                                <TextBlock  Text="All:" Margin="5,0,0,0" />
+                                                <TextBlock x:Name="txtConnectedCount" Text="" Margin="5,0,0,0" />
+                                            </StackPanel>
+                                        </Button>
+
+                                    </StackPanel>
+                                    <Grid Grid.Row="1">
+                                        <!-- Grid content -->
+                                        <Border BorderBrush="Black" BorderThickness="1" Grid.Row="1">
+                                            <Canvas x:Name="connectionPage" />
+                                        </Border>
+                                    </Grid>
+                                    <!-- <Canvas x:Name="connectionPage" Grid.Row="1" /> -->
+                                </Grid>
+                            </TabItem>
+
+                            <TabItem x:Name="TearcherTabItem" Width="110">
+                                <TabItem.Header>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <customControls:PackIcon Margin="2,0" Width="24" Height="24" HorizontalAlignment="Center" Kind="HumanManBoard" />
+                                        <TextBlock HorizontalAlignment="Center" Text="Teacher" />
+                                    </StackPanel>
+                                </TabItem.Header>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <!-- New row for buttons -->
+                                        <RowDefinition Height="*" />
+                                        <!-- Existing row for canvas -->
+                                    </Grid.RowDefinitions>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10">
+                                        <Button Width="113"
+                                                Margin="0,10,8,0"
+                                                Padding="10,5"
+                                                x:Name="btn_Show"
+                                                Style="{StaticResource MaterialDesignRaisedLightButton}"
+                                                Click="Button_Click">
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <customControls:PackIcon Margin="2,0" Width="24" Height="24" Kind="Television" />
+                                                <TextBlock x:Name="txtShow" Text="Show" Margin="5,0,0,0" />
+                                            </StackPanel>
+                                        </Button>
+                                        <Button Width="130"
+                                                Margin="0,10,5,0"
+                                                Padding="10,5"
+                                                x:Name="btn_UnShow"
+                                                Style="{StaticResource MaterialDesignRaisedLightButton}"
+                                                Click="Button_Click_1">
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <customControls:PackIcon Margin="2,0" Width="24" Height="24" Kind="TelevisionPlay" />
+                                                <TextBlock Text="UnShow" Margin="5,0,0,0" />
+                                            </StackPanel>
+                                        </Button>
+                                    </StackPanel>
+                                    <Grid Grid.Row="1">
+                                        <!-- Grid content -->
+                                        <Border BorderBrush="Black" BorderThickness="1" Grid.Row="1">
+                                            <Canvas x:Name="TeacherMonitor" />
+                                        </Border>
+                                    </Grid>
+                                    <!-- <Canvas x:Name="connectionPage" Grid.Row="1" /> -->
+                                </Grid>
+                            </TabItem>
+                            <TabItem x:Name="chatTabItem" Width="110">
+                                <TabItem.Header>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <customControls:PackIcon Margin="2,0" Width="24" Height="24" HorizontalAlignment="Center" Kind="Chat" />
+                                        <TextBlock HorizontalAlignment="Center" Text="Chat" />
+                                    </StackPanel>
+                                </TabItem.Header>
+                                <Grid>
+                                    <!-- Content for the second tab -->
+                                    <TextBlock Margin="8" Text="Content for Tab 2" />
+                                </Grid>
+                            </TabItem>
+                            <TabItem x:Name="AnnouncementTabItem" Width="150">
+                                <TabItem.Header>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <customControls:PackIcon Margin="2,0" Width="24" Height="24" HorizontalAlignment="Center" Kind="Announcement" />
+                                        <TextBlock HorizontalAlignment="Center" Text="Announcement" />
+                                    </StackPanel>
+                                </TabItem.Header>
+                                <Grid>
+                                    <!-- Content for the second tab -->
+                                    <TextBlock Margin="8" Text="Content for Tab 2" />
+                                </Grid>
+                            </TabItem>
+                            <TabItem x:Name="Configuration" Width="150">
+                                <TabItem.Header>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <customControls:PackIcon Margin="2,0" Width="24" Height="24" HorizontalAlignment="Center" Kind="Settings" />
+                                        <TextBlock  Text="Configuration" />
+                                    </StackPanel>
+                                </TabItem.Header>
+                                <Grid>
+                                    <!-- Content for the second tab -->
+                                    <TextBlock Margin="8">
+                                        <TextBox
+                                            Width="150"
+                                            ToolTip="(ex: 192.168.124.)"
+                                            x:Name="txt_IPMask"
+                                            materialDesign:HintAssist.HelperText="Your IP Mask"
+                                            materialDesign:HintAssist.HelperTextFontSize="16"
+                                            materialDesign:HintAssist.Hint="ex: 192.168.124."
+                                            materialDesign:HintAssist.HintOpacity="60"
+                                            />
+                                        <Button Width="113"
+                                                Margin="0,10,8,0"
+                                                Padding="10,5"
+                                                x:Name="btn_Save"
+                                                Style="{StaticResource MaterialDesignRaisedLightButton}"
+                                                >
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <customControls:PackIcon x:Name="iconSaveEdit" Margin="2,0" Width="24" Height="24" Kind="ContentSave" />
+                                                <TextBlock x:Name="txtSave" Text="Save" Margin="5,0,0,0" />
+                                            </StackPanel>
+                                        </Button>
+                                    </TextBlock>
+                                </Grid>
+                            </TabItem>
+                            <TabItem x:Name="Students" Width="150">
+                                <TabItem.Header>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <customControls:PackIcon Margin="2,0" Width="24" Height="24" HorizontalAlignment="Center" Kind="AccountStudent" />
+                                        <TextBlock  Text="Students" />
+                                    </StackPanel>
+                                </TabItem.Header>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <!-- New row for buttons -->
+                                        <RowDefinition Height="*" />
+                                        <!-- Existing row for canvas -->
+                                    </Grid.RowDefinitions>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10">
+                                        <TextBlock VerticalAlignment="Center"
+                                                   Margin="0,10,0,0"
+                                                   Padding="10,5"> Enter IP Mask:</TextBlock>
+                                        <TextBox
+                                            VerticalAlignment="Center"
+                                            x:Name="txtIPMask"
+                                            Margin="20,0"
+                                            materialDesign:HintAssist.Hint="ex:192.168.123."
+                                            materialDesign:HintAssist.HintOpacity="20"
+                                            
+                                            Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                        <Button Width="100"
+                                                Margin="0,10,5,0"
+                                                Padding="10,5"
+                                                x:Name="btn_Search"
+                                                Style="{StaticResource MaterialDesignRaisedLightButton}"
+                                                Click="Btn_Search_OnClick">
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <customControls:PackIcon Margin="2,0" Width="24" Height="24" Kind="Magnify" />
+                                                <TextBlock Text="Search" Margin="5,0,0,0" />
+                                            </StackPanel>
+                                        </Button>
+                                    </StackPanel>
+                                   
+                                    <Grid Grid.Row="1">
+                                        <!-- Grid content -->
+                                        <Border BorderBrush="Black" BorderThickness="1" Grid.Row="1">
+                                            <Canvas x:Name="studentPage" />
+                                        </Border>
+                                    </Grid>
+                                    <!-- <Canvas x:Name="connectionPage" Grid.Row="1" /> -->
+                                </Grid>
+                            </TabItem>
+                        </TabControl>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="TAB 2">
+                    <TextBlock Margin="8" Text="Content for Tab 2" />
+                </TabItem>
+                <TabItem Header="TAB 3">
+                    <TextBlock Margin="8" Text="Content for Tab 3" />
+                </TabItem>
+                <TabItem Header="TAB 4">
+                    <TextBlock Margin="8" Text="Content for Tab 4" />
+                </TabItem>
+                <TabItem Header="TAB 5">
+                    <TextBlock Margin="8" Text="Content for Tab 5" />
+                </TabItem>
+                <TabItem Header="TAB 6">
+                    <TextBlock Margin="8" Text="Content for Tab 6" />
+                </TabItem>
+                <!-- Add more TabItems as needed -->
+            </TabControl>
+        </customControls:Card>
+        
+        <userControl:LoadingPage x:Name="loadingPage" Visibility="Collapsed" />
+    </Grid>
+</Window>
