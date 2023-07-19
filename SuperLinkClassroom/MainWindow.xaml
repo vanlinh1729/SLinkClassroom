@@ -10,21 +10,13 @@
         xmlns:userControl="clr-namespace:SuperLinkClassroom.UserControl"
         Loaded="MainWindow_OnLoad"
         mc:Ignorable="d"
-        Title="S-Link Classroom Management" Height="703" Width="1375" WindowStartupLocation="CenterScreen" Icon="/logoslink1.png">
+        Title="S-Link Classroom Management" Height="703" Width="1375" WindowStartupLocation="CenterScreen" Icon="/logo_slink.jpg">
     <Grid x:Name="mainContentGrid">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="9*"/>
-            <ColumnDefinition Width="59*"/>
-            <ColumnDefinition Width="39*"/>
-            <ColumnDefinition Width="42*"/>
-            <ColumnDefinition Width="328*"/>
-            <ColumnDefinition Width="898*"/>
-        </Grid.ColumnDefinitions>
-        <customControls:Card Margin="4,4,4,4" Grid.ColumnSpan="6">
-            <!-- Menu content -->
-        </customControls:Card>
-
-        <customControls:Card Margin="1,10,10,10" Grid.ColumnSpan="5" Grid.Column="1">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" /> <!-- Vị trí và kích thước của Grid chính -->
+            <RowDefinition Height="Auto" /> <!-- Vị trí và kích thước của Grid chứa ProgressBar -->
+        </Grid.RowDefinitions>
+        <customControls:Card x:Name="CardContent" Margin="10,10,10,10" Grid.ColumnSpan="5" Grid.Column="1">
             <TabControl customControls:ColorZoneAssist.Mode="PrimaryDark">
                 <TabItem Header="Class">
                     <Grid>
@@ -79,7 +71,7 @@
                                         </Button>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-                                        <Button 
+                                        <Button
                                                 Margin="0,10,8,0"
                                                 Padding="10,5"
                                                 Style="{StaticResource MaterialDesignRaisedLightButton}">
@@ -89,7 +81,7 @@
                                                 <TextBlock x:Name="txtConnectedCount" Text="" Margin="5,0,0,0" />
                                             </StackPanel>
                                         </Button>
-
+        
                                     </StackPanel>
                                     <Grid Grid.Row="1">
                                         <!-- Grid content -->
@@ -100,7 +92,7 @@
                                     <!-- <Canvas x:Name="connectionPage" Grid.Row="1" /> -->
                                 </Grid>
                             </TabItem>
-
+        
                             <TabItem x:Name="TearcherTabItem" Width="110">
                                 <TabItem.Header>
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -121,7 +113,7 @@
                                                 Padding="10,5"
                                                 x:Name="btn_Show"
                                                 Style="{StaticResource MaterialDesignRaisedLightButton}"
-                                                Click="Button_Click">
+                                                Click="Btn_Show_OnClick">
                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                                                 <customControls:PackIcon Margin="2,0" Width="24" Height="24" Kind="Television" />
                                                 <TextBlock x:Name="txtShow" Text="Show" Margin="5,0,0,0" />
@@ -132,7 +124,7 @@
                                                 Padding="10,5"
                                                 x:Name="btn_UnShow"
                                                 Style="{StaticResource MaterialDesignRaisedLightButton}"
-                                                Click="Button_Click_1">
+                                                Click="Btn_UnShow_OnClick">
                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                                                 <customControls:PackIcon Margin="2,0" Width="24" Height="24" Kind="TelevisionPlay" />
                                                 <TextBlock Text="UnShow" Margin="5,0,0,0" />
@@ -157,7 +149,7 @@
                                 </TabItem.Header>
                                 <Grid>
                                     <!-- Content for the second tab -->
-                                    <TextBlock Margin="8" Text="Content for Tab 2" />
+                                    <TextBlock Margin="8" Text="Content for Chat" />
                                 </Grid>
                             </TabItem>
                             <TabItem x:Name="AnnouncementTabItem" Width="150">
@@ -169,7 +161,7 @@
                                 </TabItem.Header>
                                 <Grid>
                                     <!-- Content for the second tab -->
-                                    <TextBlock Margin="8" Text="Content for Tab 2" />
+                                    <TextBlock Margin="8" Text="Content for Announcement tab" />
                                 </Grid>
                             </TabItem>
                             <TabItem x:Name="Configuration" Width="150">
@@ -180,40 +172,6 @@
                                     </StackPanel>
                                 </TabItem.Header>
                                 <Grid>
-                                    <!-- Content for the second tab -->
-                                    <TextBlock Margin="8">
-                                        <TextBox
-                                            Width="150"
-                                            ToolTip="(ex: 192.168.124.)"
-                                            x:Name="txt_IPMask"
-                                            materialDesign:HintAssist.HelperText="Your IP Mask"
-                                            materialDesign:HintAssist.HelperTextFontSize="16"
-                                            materialDesign:HintAssist.Hint="ex: 192.168.124."
-                                            materialDesign:HintAssist.HintOpacity="60"
-                                            />
-                                        <Button Width="113"
-                                                Margin="0,10,8,0"
-                                                Padding="10,5"
-                                                x:Name="btn_Save"
-                                                Click="Btn_Save_OnClick"
-                                                Style="{StaticResource MaterialDesignRaisedLightButton}"
-                                                >
-                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                                <customControls:PackIcon x:Name="iconSaveEdit" Margin="2,0" Width="24" Height="24" Kind="ContentSave" />
-                                                <TextBlock x:Name="txtSave" Text="Save" Margin="5,0,0,0" />
-                                            </StackPanel>
-                                        </Button>
-                                    </TextBlock>
-                                </Grid>
-                            </TabItem>
-                            <TabItem x:Name="Students" Width="150">
-                                <TabItem.Header>
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                        <customControls:PackIcon Margin="2,0" Width="24" Height="24" HorizontalAlignment="Center" Kind="AccountStudent" />
-                                        <TextBlock  Text="Students" />
-                                    </StackPanel>
-                                </TabItem.Header>
-                                <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
                                         <!-- New row for buttons -->
@@ -221,13 +179,21 @@
                                         <!-- Existing row for canvas -->
                                     </Grid.RowDefinitions>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10">
-                                        <TextBlock VerticalAlignment="Center"
-                                                   Margin="0,10,0,0"
-                                                   Padding="10,5"> Enter IP Mask:</TextBlock>
+                                        <StackPanel>
+                                            <TextBlock VerticalAlignment="Center"
+                                                       FontSize="15"
+                                                       FontWeight="Bold"
+                                                       Margin="0,10,0,0"
+                                                       Padding="10,5"> Enter IP range (searching from 1 to 255):</TextBlock>
+                                            <TextBlock Text="Dưới textblock Enter your IP range" Margin="10,0,0,0" />
+
+                                        </StackPanel>
                                         <TextBox
+                                            Width="150"
+                                            FontSize="15"
                                             VerticalAlignment="Center"
-                                            Margin="20,0"
-                                            materialDesign:HintAssist.Hint="ex:192.168.123."
+                                            Margin="20,10"
+                                            materialDesign:HintAssist.Hint="ex: 192.168.123."
                                             materialDesign:HintAssist.HintOpacity="20"
                                             x:Name="txtIPMask"
                                             Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
@@ -243,11 +209,11 @@
                                             </StackPanel>
                                         </Button>
                                     </StackPanel>
-                                   
+                                    
                                     <Grid Grid.Row="1">
                                         <!-- Grid content -->
                                         <Border BorderBrush="Black" BorderThickness="1" Grid.Row="1">
-                                            <Canvas x:Name="studentPage" />
+                                            <WrapPanel x:Name="studentPage" Orientation="Horizontal" />
                                         </Border>
                                     </Grid>
                                     <!-- <Canvas x:Name="connectionPage" Grid.Row="1" /> -->
@@ -274,7 +240,17 @@
                 <!-- Add more TabItems as needed -->
             </TabControl>
         </customControls:Card>
-        
-        <userControl:LoadingPage x:Name="loadingPage" Visibility="Collapsed" />
+        <Grid Name="LoadingGrid" Background="#AA000000" Visibility="Collapsed">
+            <!-- <ProgressBar -->
+            <!--     x:Name="loading" -->
+            <!--     IsIndeterminate="True" /> -->
+            <ProgressBar
+                x:Name="loading"
+                IsIndeterminate="True"
+                Style="{StaticResource MaterialDesignCircularProgressBar}"
+                Value="0" />
+        </Grid>
     </Grid>
+    
+    
 </Window>

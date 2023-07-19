@@ -122,6 +122,9 @@
   <ItemGroup>
     <Resource Include="logoslink1.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="logo_slink.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.5.0.0-ci321\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.5.0.0-ci321\build\MaterialDesignThemes.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
