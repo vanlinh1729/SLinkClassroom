@@ -28,6 +28,7 @@ namespace SuperLinkClassroom
     {
         private RemoteDesktopWpf localDesktop; // LocalDesktopWpf control to display your own screen
         private List<string> ips = new List<string>();
+        private string localip;
         private int connectedCount = 0; // Số kết nối VNC đang được mở
 
         public MainWindow()
@@ -42,6 +43,7 @@ namespace SuperLinkClassroom
         {
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             WindowState = WindowState.Maximized;
+            localip = GetLocalIPAddress();
             Activate();
         }
 
@@ -171,7 +173,7 @@ namespace SuperLinkClassroom
 
         private void PingCompleted(PingReply reply, Exception o, bool cancelled, object userToken)
         {
-            if (reply != null && reply.Status == IPStatus.Success)
+            if (reply != null && reply.Status == IPStatus.Success && reply.Address.ToString() != localip)
             {
                 if (IsOpenPort(reply.Address.ToString()))
                 {
@@ -246,6 +248,20 @@ namespace SuperLinkClassroom
                 HideLoadingScreen();
             }
         }
+        private string GetLocalIPAddress()
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+                foreach (var ip in host.AddressList)
+                {
+                    if (ip.AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        
+                        localip = ip.ToString();
+                    }
+                }
+
+                return localip;
+        }
 
         private void ShowLoadingScreen()
         {
@@ -261,12 +277,12 @@ namespace SuperLinkClassroom
 
         private void Btn_Show_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            MessageBox.Show("This feature is in develop progress");
         }
 
         private void Btn_UnShow_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            MessageBox.Show("This feature is in develop progress");
         }
     }
 }

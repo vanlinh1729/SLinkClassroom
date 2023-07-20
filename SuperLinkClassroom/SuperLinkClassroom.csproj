@@ -120,10 +120,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="logoslink1.png" />
+    <Resource Include="logo_slink.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="logo_slink.jpg" />
+    <Resource Include="logoslink.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.5.0.0-ci321\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.5.0.0-ci321\build\MaterialDesignThemes.targets')" />

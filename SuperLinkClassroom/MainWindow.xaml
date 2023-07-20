@@ -10,7 +10,7 @@
         xmlns:userControl="clr-namespace:SuperLinkClassroom.UserControl"
         Loaded="MainWindow_OnLoad"
         mc:Ignorable="d"
-        Title="S-Link Classroom Management" Height="703" Width="1375" WindowStartupLocation="CenterScreen" Icon="/logo_slink.jpg">
+        Title="S-Link Classroom Management" Height="703" Width="1375" WindowStartupLocation="CenterScreen" Icon="/logoslink.ico">
     <Grid x:Name="mainContentGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" /> <!-- Vị trí và kích thước của Grid chính -->
@@ -184,8 +184,8 @@
                                                        FontSize="15"
                                                        FontWeight="Bold"
                                                        Margin="0,10,0,0"
-                                                       Padding="10,5"> Enter IP range (searching from 1 to 255):</TextBlock>
-                                            <TextBlock Text="Dưới textblock Enter your IP range" Margin="10,0,0,0" />
+                                                       Padding="10,5"> Enter IP range:</TextBlock>
+                                            <TextBlock Text="Searching all connections in IP range" Margin="10,0,0,0" />
 
                                         </StackPanel>
                                         <TextBox
