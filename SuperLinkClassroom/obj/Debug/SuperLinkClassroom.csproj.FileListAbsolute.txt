@@ -30,3 +30,5 @@ C:\Users\ADMIN\Desktop\ClassroomManagement\SuperLinkClassroom\SuperLinkClassroom
 C:\Users\ADMIN\Desktop\ClassroomManagement\SuperLinkClassroom\SuperLinkClassroom\obj\Debug\SuperLinkClassroom.csproj.CopyComplete
 C:\Users\ADMIN\Desktop\ClassroomManagement\SuperLinkClassroom\SuperLinkClassroom\obj\Debug\UserControl\LoadingPage.g.cs
 C:\Users\ADMIN\Desktop\ClassroomManagement\SuperLinkClassroom\SuperLinkClassroom\obj\Debug\UserControl\LoadingPage.baml
+C:\Users\ADMIN\Desktop\ClassroomManagement\SuperLinkClassroom\SuperLinkClassroom\obj\Debug\LoginWindow.baml
+C:\Users\ADMIN\Desktop\ClassroomManagement\SuperLinkClassroom\SuperLinkClassroom\obj\Debug\LoginWindow.g.cs

@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\ADMIN\Desktop\ClassroomManagement\SuperLinkClassroom\SuperLinkClassroom\App.xaml
-31259524711
+4442091684
 
-91731346829
+121115894543
 17985159402
-MainWindow.xaml;ResourceXAML\MainResource.xaml;UserControl\LoadingPage.xaml;
+LoginWindow.xaml;MainWindow.xaml;ResourceXAML\MainResource.xaml;UserControl\LoadingPage.xaml;
 
-False
+True
 
