@@ -20,6 +20,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using MaterialDesignThemes.Wpf;
+using SuperLinkClassroom.Model;
 
 namespace SuperLinkClassroom
 {
@@ -28,17 +29,23 @@ namespace SuperLinkClassroom
     /// </summary>
     public partial class MainWindow : Window
     {
+        
         private RemoteDesktopWpf localDesktop; // LocalDesktopWpf control to display your own screen
         private List<string> ips = new List<string>();
         private string localip;
         private int connectedCount = 0; // Số kết nối VNC đang được mở
-
+        private TcpListener tcpListener;
+        private ConcurrentBag<TcpClient> connectedClients = new ConcurrentBag<TcpClient>();
+        private TcpClient tcpClient;
+        private NetworkStream stream;
+    
         public MainWindow()
         {
             LoginWindow loginWindow = new LoginWindow();
             loginWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen; // Center the login window
             loginWindow.ShowDialog();
             InitializeComponent();
+            StartServer();
             UpdateConnectedCount();
             btn_Disconnect.IsEnabled = false;
             btn_Connect.IsEnabled = true;
@@ -50,6 +57,19 @@ namespace SuperLinkClassroom
         {
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             WindowState = WindowState.Maximized;
+            txtChatServerIPAddress.Text = GetLocalIPAddress();
+            try
+            {
+                tcpClient = new TcpClient();
+                await tcpClient.ConnectAsync(GetLocalIPAddress(), 12345); // Replace with the actual IP address of the server
+                stream = tcpClient.GetStream();
+                ReceiveMessages();
+            }
+            catch (Exception ex)
+            {
+                // Handle connection errors
+            }
+
             localip = GetLocalIPAddress() != null ? GetLocalIPAddress() : GetEthernetIPv4Address();
             Activate();
         }
@@ -209,7 +229,7 @@ namespace SuperLinkClassroom
         }
 
         private async void Btn_Search_OnClick(object sender, RoutedEventArgs e)
-        { 
+        {
             ips.Clear();
             studentPage.Children.Clear();
             string ipAddress = txtIPMask.Text;
@@ -238,13 +258,13 @@ namespace SuperLinkClassroom
                 await Task.WhenAll(pingTasks);
 
                 studentPage.Children.Clear();
-                
+
                 double chipMargin = 10; // Spacing between the chips
 
                 foreach (string ip in ips)
                 {
                     string hostName = GetHostName(ip);
-                    
+
                     // Create a new Chip for each IP
                     MaterialDesignThemes.Wpf.Chip chip = new MaterialDesignThemes.Wpf.Chip();
                     chip.Style = (Style)Application.Current.Resources["MaterialDesignOutlineChip"];
@@ -288,9 +308,9 @@ namespace SuperLinkClassroom
                     // Add the Chip to studentPage
                     studentPage.Children.Add(chip);
                 }
+ 
 
-
-                // Sau khi hoàn thành, gọi HideLoadingScreen() để ẩn màn hình loading
+                // Sau khi hoàn thành, gọi HideLoadingScreen()để ẩn màn hình loading
                 HideLoadingScreen();
             }
             catch (Exception exception)
@@ -378,8 +398,8 @@ namespace SuperLinkClassroom
         {
             MessageBox.Show("This feature is in develop progress");
         }
-        
-        
+
+
         private async void Btn_Remote_OnClick(object sender, RoutedEventArgs e)
         {
             ShowLoadingScreen();
@@ -400,7 +420,7 @@ namespace SuperLinkClassroom
             rdp.Width = RemoteMonitor.ActualWidth;
             rdp.Height = RemoteMonitor.ActualHeight;
 
-            
+
             try
             {
                 await Task.Delay(1000);
@@ -412,7 +432,9 @@ namespace SuperLinkClassroom
                 RemoteMonitor.Children.Add(rdp);
 
                 // Get the computer name
-                string computerName = GetHostName(txtIP.Text); // Replace this with the method to retrieve the computer name
+                string
+                    computerName =
+                        GetHostName(txtIP.Text); // Replace this with the method to retrieve the computer name
 
                 // Update the computer name in the tab header
                 txtComputerName.Text = !string.IsNullOrEmpty(computerName) ? " - " + computerName : "";
@@ -432,7 +454,7 @@ namespace SuperLinkClassroom
             {
                 MessageBox.Show(ex.Message, "Error when connecting to remote desktop");
             }
-            
+
         }
 
         private void btn_Disremote_Click(object sender, RoutedEventArgs e)
@@ -472,6 +494,192 @@ namespace SuperLinkClassroom
             {
                 return null; // Trả về null nếu không thể lấy tên máy tính từ địa chỉ IP
             }
+        }
+
+        private async void StartServer()
+        {
+            tcpListener = new TcpListener(IPAddress.Any, 12345);
+            tcpListener.Start();
+
+            while (true)
+            {
+                TcpClient client = await tcpListener.AcceptTcpClientAsync();
+                connectedClients.Add(client);
+
+                Task.Run(() => HandleClient(client));
+            }
+        }
+
+        private async void HandleClient(TcpClient client)
+        {
+            try
+            {
+                using (var stream = client.GetStream())
+                {
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+
+                    while ((bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                    {
+                        string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                        BroadcastMessage(message);
+                    }
+
+                    connectedClients.TryTake(out client);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions here
+            }
+        }
+
+        private void BroadcastMessage(string message)
+        {
+            byte[] data = Encoding.UTF8.GetBytes(message + Environment.NewLine);
+
+            foreach (var client in connectedClients)
+            {
+                try
+                {
+                    client.GetStream().WriteAsync(data, 0, data.Length);
+                }
+                catch (Exception)
+                {
+                    // Handle exceptions when sending fails
+                }
+            }
+
+            // Dispatcher.Invoke(() => { txtChat.AppendText(message + Environment.NewLine); });
+        }
+        
+
+        // private async void ReceiveMessages()
+        // {
+        //     byte[] buffer = new byte[1024];
+        //     int bytesRead;
+        //
+        //     while (true)
+        //     {
+        //         try
+        //         {
+        //             bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
+        //             string messageContent = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+        //
+        //             // Hiển thị tin nhắn nhận lại trên giao diện
+        //             Dispatcher.Invoke(() =>
+        //             {
+        //                 string formattedMessage = $"{GetLocalIPAddress()} - {Environment.MachineName}: {messageContent}";
+        //                 ChatMessage receivedMsg = new ChatMessage();
+        //                 receivedMsg.SenderInfo = $"{GetLocalIPAddress()} - {Environment.MachineName}: ";
+        //                 receivedMsg.MessageContent = $"{messageContent}";
+        //                 messageListView.Items.Add(receivedMsg);
+        //             });
+        //         }
+        //         catch (Exception)
+        //         {
+        //             // Handle exceptions or disconnections
+        //             break;
+        //         }
+        //     }
+        // }
+        
+        private async void ReceiveMessages()
+        {
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+
+            while (true)
+            {
+                try
+                {
+                    bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
+                    string messageContent = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+
+                  
+
+                    // Update the UI using Dispatcher
+                    Dispatcher.Invoke(() =>
+                    {
+                        ChatMessage receivedMsg = new ChatMessage();
+                        receivedMsg.SenderInfo = messageContent.IndexOf(":") != -1 ? messageContent.Substring(0, messageContent.IndexOf(":")) +":" : "Unknown" ;
+                        receivedMsg.MessageContent = messageContent.Substring(messageContent.IndexOf(":")+1);
+                        ScrollToBottom(FindVisualChild<ScrollViewer>(messageListView));
+                        messageListView.Items.Add(receivedMsg);
+                    });
+                }
+                catch (Exception)
+                {
+                    // Handle exceptions or disconnections
+                    break;
+                }
+            }
+        }
+        
+        
+        private async Task SendMessage(string message)
+        {
+            try
+            {
+                string senderInfo = $"{Environment.MachineName} - {GetLocalIPAddress()}";
+                string formattedMessage = $"{senderInfo}: {message}";
+
+                byte[] data = Encoding.UTF8.GetBytes(formattedMessage);
+                await stream.WriteAsync(data, 0, data.Length);
+
+                // Scroll to the bottom after sending a message
+                ScrollToBottom(FindVisualChild<ScrollViewer>(messageListView));
+            }
+            catch (Exception)
+            {
+                // Handle send errors
+            }
+        }
+
+        private void btnSend_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (tcpClient == null || !tcpClient.Connected)
+            {
+                MessageBox.Show("Please join the class first before sending a message.");
+                return;
+            }
+            string messageContent = messageTextBox.Text;
+            if (messageContent != "")
+            {
+                SendMessage(messageContent);
+            }
+            // Clear the message input field
+            messageTextBox.Text = string.Empty;
+            ScrollToBottom(FindVisualChild<ScrollViewer>(messageListView));
+
+        }
+
+        private void ScrollToBottom(ScrollViewer scrollViewer)
+        {
+            if (scrollViewer != null)
+            {
+                scrollViewer.ScrollToEnd();
+            }
+        }
+        private static T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
+        {
+            int childCount = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < childCount; i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                if (child is T typedChild)
+                {
+                    return typedChild;
+                }
+
+                T result = FindVisualChild<T>(child);
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+            return null;
         }
     }
 }

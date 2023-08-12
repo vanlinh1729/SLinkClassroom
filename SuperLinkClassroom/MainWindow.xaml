@@ -236,8 +236,34 @@
                                     </StackPanel>
                                 </TabItem.Header>
                                 <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+        
+                                    <!-- Khung chat -->
+                                    <ListView x:Name="messageListView" Grid.Row="0">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding SenderInfo}" FontWeight="Bold"/>
+                                                    <Border Margin="5" CornerRadius="10" Background="DarkGray" Padding="10">
+                                                        <TextBlock Text="{Binding MessageContent}" />
+                                                    </Border>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+        
+                                    <!-- Phần nhập tin nhắn -->
+                                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <TextBox x:Name="messageTextBox" Width="500" VerticalAlignment="Center" FontSize="16" />
+                                        <Button Width="60" Height="40" Margin="10,0,0,0" Click="btnSend_Click">
+                                            <customControls:PackIcon Width="24" Height="24" Kind="Send" />
+                                        </Button>
+                                    </StackPanel>
                                     <!-- Content for the second tab -->
-                                    <TextBlock Margin="8" Text="Content for Chat" />
+                                    <!-- <TextBox x:Name="txtChat" IsEnabled="False"></TextBox> -->
                                 </Grid>
                             </TabItem>
                             <TabItem x:Name="AnnouncementTabItem" Width="150">
@@ -296,6 +322,10 @@
                                                 <TextBlock Text="Search" Margin="5,0,0,0" />
                                             </StackPanel>
                                         </Button>
+                                    </StackPanel>
+                                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10">
+                                        <TextBlock FontWeight="Bold" Text="Chat Server IP Address:" FontSize="16" VerticalAlignment="Top" Margin="0,0,5,0" />
+                                        <TextBlock FontWeight="Normal" x:Name="txtChatServerIPAddress" FontSize="14" VerticalAlignment="Bottom" />
                                     </StackPanel>
                                     
                                     <Grid Grid.Row="1">
