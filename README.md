@@ -2,6 +2,6 @@
 
 Remote (View) desktop screen in LAN using VNCSharpWpf. (TightVNC server)
 
-Send Message via LAN.
+Send Message using tcp/ip over LAN.
 
 -Linh's mini project- 
